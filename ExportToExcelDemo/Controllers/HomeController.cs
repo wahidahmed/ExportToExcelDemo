@@ -32,6 +32,8 @@ namespace ExportToExcelDemo.Controllers
         [HttpGet]
         public FileContentResult ExportToExcel()
         {
+
+
             List<Technology> technologies = StaticData.Technologies;
             string[] columns = { "Name", "Project", "Developer" };
             byte[] filecontent = ExcelExportHelper.ExportExcel(technologies, "Technology", true, columns);
