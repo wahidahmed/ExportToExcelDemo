@@ -41,7 +41,7 @@ namespace ExportToExcelDemo.Models
             return dataTable;
         }
 
-        public static byte[] ExportExcel(DataTable dataTable, Dictionary<string, string> col, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        public static byte[] ExportExcel(DataTable dataTable, Dictionary<string, string> col, string heading = "", bool showSrNo = false)
         {
 
             byte[] result = null;
@@ -158,9 +158,9 @@ namespace ExportToExcelDemo.Models
             return result;
         }
 
-        public static byte[] ExportExcel<T>(List<T> data, Dictionary<string, string> column, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcel<T>(List<T> data, Dictionary<string, string> column, string Heading = "", bool showSlno = false)
         {
-            return ExportExcel(ListToDataTable<T>(data),column, Heading, showSlno, ColumnsToTake);
+            return ExportExcel(ListToDataTable<T>(data),column, Heading, showSlno);
         }
     }
 }
