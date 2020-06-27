@@ -11,6 +11,9 @@ namespace ExportToExcelDemo.Models
 {
     public class ExcelExportHelper
     {
+
+        // excel work link
+        //// https://www.c-sharpcorner.com/article/export-to-excel-in-asp-net-mvc/
         public static string ExcelContentType
         {
             get
@@ -41,7 +44,7 @@ namespace ExportToExcelDemo.Models
             return dataTable;
         }
 
-        public static byte[] ExportExcel(DataTable dataTable, Dictionary<string, string> col, string heading = "", bool showSrNo = false)
+        public static byte[] ExportExcel(DataTable dataTable, Dictionary<string, string> col, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
 
             byte[] result = null;
@@ -158,9 +161,9 @@ namespace ExportToExcelDemo.Models
             return result;
         }
 
-        public static byte[] ExportExcel<T>(List<T> data, Dictionary<string, string> column, string Heading = "", bool showSlno = false)
+        public static byte[] ExportExcel<T>(List<T> data, Dictionary<string, string> column, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
-            return ExportExcel(ListToDataTable<T>(data),column, Heading, showSlno);
+            return ExportExcel(ListToDataTable<T>(data),column, Heading, showSlno, ColumnsToTake);
         }
     }
 }

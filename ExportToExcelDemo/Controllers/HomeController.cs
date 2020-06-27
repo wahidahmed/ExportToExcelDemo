@@ -35,11 +35,12 @@ namespace ExportToExcelDemo.Controllers
 
 
             List<Technology> technologies = StaticData.Technologies;
+            string[] columns = { "Name", "Project", "Developer" };
             Dictionary<string, string> col = new Dictionary<string, string>();
             col.Add("Name", "NAME");
             col.Add("Project", "PROJECT");
             col.Add("Developer", "DEVELOPER");
-            byte[] filecontent = ExcelExportHelper.ExportExcel(technologies, col, "Technology", true);
+            byte[] filecontent = ExcelExportHelper.ExportExcel(technologies, col, "Technology", true, columns);
             return File(filecontent, ExcelExportHelper.ExcelContentType, "Technologies.xlsx");
         }
 
