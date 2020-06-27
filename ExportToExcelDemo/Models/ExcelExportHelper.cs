@@ -41,15 +41,16 @@ namespace ExportToExcelDemo.Models
             return dataTable;
         }
 
-        public static byte[] ExportExcel(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        public static byte[] ExportExcel(DataTable dataTable, Dictionary<string, string> col, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
 
             byte[] result = null;
+           
             using (ExcelPackage package = new ExcelPackage())
             {
                 ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(String.Format("{0} Data", heading));
-                int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
-
+                int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 2;
+               
                 if (showSrNo)
                 {
                     DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
@@ -77,10 +78,10 @@ namespace ExportToExcelDemo.Models
                         workSheet.Column(columnIndex).AutoFit();
                     }
 
-
+                    
                     columnIndex++;
                 }
-
+               
                 // format header - bold, yellow on black  
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
@@ -105,27 +106,51 @@ namespace ExportToExcelDemo.Models
                 }
 
                 // removed ignored columns  
-                for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
+                //for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
+                //{
+                //    if (i == 0 && showSrNo)
+                //    {
+                //        continue;
+                //    }
+                //    if (!columnsToTake.Contains(dataTable.Columns[i].ColumnName))
+                //    {
+                //        workSheet.DeleteColumn(i + 1);
+
+                //    }
+
+                //}
+
+                for (int i=0;i<= dataTable.Columns.Count-1; i++)
                 {
                     if (i == 0 && showSrNo)
                     {
                         continue;
                     }
-                    if (!columnsToTake.Contains(dataTable.Columns[i].ColumnName))
+                    
+                    if (!col.Keys.Contains(dataTable.Columns[i].ColumnName))
                     {
                         workSheet.DeleteColumn(i + 1);
-                    }
-                }
 
+                    }
+                    else
+                    {
+                        int index = 1 + i;
+                        workSheet.SetValue(startRowFrom, index, col[dataTable.Columns[i].ColumnName]);
+                    }
+                    
+                }
+               
                 if (!String.IsNullOrEmpty(heading))
                 {
                     workSheet.Cells["A1"].Value = heading;
                     workSheet.Cells["A1"].Style.Font.Size = 20;
 
-                    workSheet.InsertColumn(1, 1);
-                    workSheet.InsertRow(1, 1);
+                    workSheet.InsertColumn(2,0);
+                    workSheet.InsertRow(2, 0);
                     workSheet.Column(1).Width = 5;
+                    
                 }
+
 
                 result = package.GetAsByteArray();
             }
@@ -133,9 +158,9 @@ namespace ExportToExcelDemo.Models
             return result;
         }
 
-        public static byte[] ExportExcel<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcel<T>(List<T> data, Dictionary<string, string> column, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
-            return ExportExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
+            return ExportExcel(ListToDataTable<T>(data),column, Heading, showSlno, ColumnsToTake);
         }
     }
 }
